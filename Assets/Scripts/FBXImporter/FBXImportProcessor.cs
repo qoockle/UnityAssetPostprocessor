@@ -2,11 +2,18 @@
 using UnityEditor;
 using UnityEngine;
 
+
 public class FBXImportProcessor : AssetPostprocessor
 {
     void OnPreprocessModel()
     {
         // FBXImportUtility.Validate(assets);
+
+        var settings = FBXImportSettings.Instance;
+        var importScale = settings.ImportScale;
+        var ignorePrefix = settings.IgnorePrefix;
+        var loopSufix = settings.LoopSufix;
+        var resampleCurveErrors = settings.ResampleCurveErrors;
 
         ModelImporter modelImporter = assetImporter as ModelImporter;
         AssetImporter importer = assetImporter as AssetImporter;
@@ -15,10 +22,10 @@ public class FBXImportProcessor : AssetPostprocessor
             Debug.Log("ValidateOnImport == TRUE");
 
             modelImporter.animationCompression = ModelImporterAnimationCompression.Optimal;
-            modelImporter.animationPositionError = FBXImportSettings.Instance.ResampleCurveErrors;
-            modelImporter.animationRotationError = FBXImportSettings.Instance.ResampleCurveErrors;
-            modelImporter.animationScaleError = FBXImportSettings.Instance.ResampleCurveErrors;
-            modelImporter.globalScale = FBXImportSettings.Instance.ImportScale;
+            modelImporter.animationPositionError = resampleCurveErrors;
+            modelImporter.animationRotationError = resampleCurveErrors;
+            modelImporter.animationScaleError = resampleCurveErrors;
+            modelImporter.globalScale = importScale;
             //FBXImportUtility.Validate(_assets);
         }
         else

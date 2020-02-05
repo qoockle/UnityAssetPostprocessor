@@ -42,15 +42,14 @@ public class FBXImportSettings : ScriptableObject
                 asset = AssetDatabase.LoadAssetAtPath<FBXImportSettings>(path);
                 if (asset == null)
                 {
+                    Debug.Log("Asset LOADED");
                     asset = CreateInstance<FBXImportSettings>();
-                  //  AssetDatabase.CreateAsset(asset, path);
-                  //  AssetDatabase.SaveAssets();
+                    AssetDatabase.CreateAsset(asset, path);
+                    AssetDatabase.SaveAssets();
                 }
             }
         }
        // Debug.Log("LoadAsset(" + asset + ")");
         return asset;
     }
-
-   
 }

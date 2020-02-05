@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f0588401a8b364fbdbe5b5de2c90d6, type: 3}
   m_Name: FBXImportSettingsAsset
   m_EditorClassIdentifier: 
-  ValidateOnImport: 0
+  ValidateOnImport: 1
   DeleteFBXAfterValidate: 0
-  ImportScale: 129.12
+  ImportScale: 144.2
   ResampleCurveErrors: 23.1
   LoopSufix:
   - Loop

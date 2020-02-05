@@ -25,6 +25,11 @@ public class GUIImporter : EditorWindow
         if (GUILayout.Button("Rescale"))
         {
             Debug.Log("Rescale Button Pressed");
+            foreach (GameObject gameObject in Selection.gameObjects)
+            {
+                AssetDatabase.Refresh();
+            }
+
         }
     }
 }
