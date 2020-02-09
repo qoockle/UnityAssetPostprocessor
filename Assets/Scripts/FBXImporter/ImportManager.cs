@@ -9,7 +9,15 @@ using UnityEngine;
 
 public class ImportManager : EditorWindow
 {
-    private bool deleteAfterReimport = false;
+    // public FBXImportSettings _settings;
+
+    bool deleteAfterReimport = false;
+    float importScale = 1f;
+    float resampleCurveErrors = 0.9f;
+    string loop =  "loop" ;
+
+   
+
     private static ImportManager editor;
     private static int width = 350;
     private static int height = 300;
@@ -27,6 +35,14 @@ public class ImportManager : EditorWindow
 
     private void OnGUI()
     {
+        GUILayout.Label("FBX Import Settings");
+
+        importScale = EditorGUILayout.FloatField("Import Scale", importScale);
+        deleteAfterReimport = EditorGUILayout.Toggle("Delete On Import", deleteAfterReimport);
+        resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
+        loop = EditorGUILayout.TextField("Loop Settings", loop);
+
+
         if (GUILayout.Button("Rename"))
         {
             selectedGO = Selection.gameObjects;
@@ -52,7 +68,6 @@ public class ImportManager : EditorWindow
             for (int i = 0; i < files.Count; i++)
             {
                 int idx = files[i].IndexOf("Assets");      
-                //string filename = Path.GetFileName(files[i]);
                 string asset = files[i].Substring(idx);
                 AnimationClip orgClip = (AnimationClip)AssetDatabase.LoadAssetAtPath(asset, typeof(AnimationClip));
 
@@ -70,13 +85,25 @@ public class ImportManager : EditorWindow
         Debug.Log("Rename And Reimport ()");
         ModelImporter modelImporter = asset as ModelImporter;
         ModelImporterClipAnimation[] clipAnimations = modelImporter.defaultClipAnimations;
+        AssetImporter assetImporter = asset as AssetImporter;
+
+        modelImporter.animationCompression = ModelImporterAnimationCompression.Optimal;
+        modelImporter.animationPositionError = resampleCurveErrors;
+        modelImporter.animationRotationError = resampleCurveErrors;
+        modelImporter.animationScaleError = resampleCurveErrors;
+        modelImporter.globalScale = importScale;
 
         for (int i = 0; i < clipAnimations.Length; i++)
         {
             clipAnimations[i].name = name;
+            if (clipAnimations[i].name.Contains(loop))
+            {
+                clipAnimations[i].loopTime = true;
+            }
         }
 
         modelImporter.clipAnimations = clipAnimations;
+
         modelImporter.SaveAndReimport();
     }
 
@@ -99,9 +126,7 @@ public class ImportManager : EditorWindow
                 if (AssetDatabase.GetAssetPath(go).EndsWith(".fbx"))
                 {
                     files.Add(AssetDatabase.GetAssetPath(go));
-                    Debug.Log(AssetDatabase.GetAssetPath(go));
                 }
-
             }
         }
             else

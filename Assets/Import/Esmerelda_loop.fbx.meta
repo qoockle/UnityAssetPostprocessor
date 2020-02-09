@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9a73af2235f8dae4786be20abfeb983d
+guid: 15f0ad3c57e46c148804f5e8c59db628
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable:
@@ -30,6 +30,42 @@ ModelImporter:
   - first:
       74: 2356382642703988543
     second: Esmerelda 5
+  - first:
+      74: -8552768348301061391
+    second: Esmerelda 5
+  - first:
+      74: -8552768348301061391
+    second: Esmerelda 5
+  - first:
+      74: -8552768348301061391
+    second: Esmerelda 5
+  - first:
+      74: -8552768348301061391
+    second: Esmerelda 5
+  - first:
+      74: -8552768348301061391
+    second: Esmerelda 5
+  - first:
+      74: -8552768348301061391
+    second: Esmerelda 5
+  - first:
+      74: -8095376093359839160
+    second: Esmerelda_loop
+  - first:
+      74: -1026658584184913891
+    second: Esmerelda_loop
+  - first:
+      74: -1026658584184913891
+    second: Esmerelda_loop
+  - first:
+      74: -1026658584184913891
+    second: Esmerelda_loop
+  - first:
+      74: -1026658584184913891
+    second: Esmerelda_loop
+  - first:
+      74: -1026658584184913891
+    second: Esmerelda_loop
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -50,18 +86,18 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 0
-    animationRotationError: 2.13
-    animationPositionError: 1.62
-    animationScaleError: 1.35
+    animationCompression: 3
+    animationRotationError: 0.9
+    animationPositionError: 0.9
+    animationScaleError: 0.9
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: 214125125
+      name: Esmerelda_loop
       takeName: Take 001
-      internalID: -8552768348301061391
+      internalID: -1026658584184913891
       firstFrame: 0
       lastFrame: 100
       wrapMode: 0
@@ -70,7 +106,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

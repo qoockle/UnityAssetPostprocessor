@@ -27,30 +27,4 @@ public class FBXImportSettings : ScriptableObject
     [Tooltip("Prefixes will be ignored by importing")]
     public string[] IgnorePrefix = new string[] { "dont_", "Dont_" };
 
-    static FBXImportSettings _instance;
-
-    private static FBXImportSettings asset;
-
-    public static FBXImportSettings Instance => _instance ?? (_instance = LoadAsset());
-
-    private static FBXImportSettings LoadAsset()
-    {
-        foreach (GameObject obj in Selection.objects)
-        {
-            var path = AssetDatabase.GetAssetPath(obj);
-            {
-                asset = AssetDatabase.LoadAssetAtPath<FBXImportSettings>(path);
-                if (asset == null)
-                {
-
-                    asset = CreateInstance<FBXImportSettings>();
-                    Debug.Log(asset + "LOADED");
-                    //  AssetDatabase.CreateAsset(asset, path);
-                    //  AssetDatabase.SaveAssets();
-                }
-            }
-        }
-       // Debug.Log("LoadAsset(" + asset + ")");
-        return asset;
-    }
 }
