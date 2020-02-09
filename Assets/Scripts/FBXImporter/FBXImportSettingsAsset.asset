@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FBXImportSettingsAsset
   m_EditorClassIdentifier: 
   ValidateOnImport: 1
-  DeleteFBXAfterValidate: 0
-  ImportScale: 144.2
+  DeleteFBXAfterValidate: 1
+  ImportScale: 146.15
   ResampleCurveErrors: 23.1
   LoopSufix:
   - Loop

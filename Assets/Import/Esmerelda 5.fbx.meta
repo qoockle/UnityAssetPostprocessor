@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a589485b583d2fd41a9569dbb3790d77
+guid: 15f0ad3c57e46c148804f5e8c59db628
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable:
@@ -8,7 +8,22 @@ ModelImporter:
     second: Take 001
   - first:
       74: -6362983349812671562
+    second: New Animation_ 2
+  - first:
+      74: -6362983349812671562
     second: ' New Animation_ 0'
+  - first:
+      74: 4404253229319081962
+    second: 124125
+  - first:
+      74: 7049287548721168984
+    second: Assets/Import/Esmerelda.fbx
+  - first:
+      74: 4465572614472275999
+    second: Esmerelda
+  - first:
+      74: -8552768348301061391
+    second: Esmerelda 5
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -38,9 +53,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ' New Animation_ 0'
+      name: Esmerelda 5
       takeName: Take 001
-      internalID: -6362983349812671562
+      internalID: -8552768348301061391
       firstFrame: 0
       lastFrame: 100
       wrapMode: 0
@@ -69,7 +84,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.555
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -103,7 +118,7 @@ ModelImporter:
     normalSmoothingSource: 0
   referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
+  copyAvatar: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -115,13 +130,12 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.555
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 945bbb0613adef748b25ecb4eec654b9,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0

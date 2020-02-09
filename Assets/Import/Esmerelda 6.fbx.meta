@@ -1,11 +1,35 @@
 fileFormatVersion: 2
-guid: 7b00f19e9eed28644b995fdb0e845770
+guid: 00805a3b96e4ca942b31fb0ec388ee53
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
     second: Take 001
+  - first:
+      74: -6362983349812671562
+    second: New Animation_ 2
+  - first:
+      74: -6362983349812671562
+    second: ' New Animation_ 0'
+  - first:
+      74: 4404253229319081962
+    second: 124125
+  - first:
+      74: 7049287548721168984
+    second: Assets/Import/Esmerelda.fbx
+  - first:
+      74: 4465572614472275999
+    second: Esmerelda
+  - first:
+      74: 7552154785869254130
+    second: Esmerelda 6
+  - first:
+      74: 170156528386559340
+    second: Esmerelda 6
+  - first:
+      74: 170156528386559340
+    second: Esmerelda 6
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -35,9 +59,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: Esmerelda 6
       takeName: Take 001
-      internalID: 1827226128182048838
+      internalID: 170156528386559340
       firstFrame: 0
       lastFrame: 100
       wrapMode: 0
@@ -98,12 +122,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips:
-  - a589485b583d2fd41a9569dbb3790d77
-  - 82424f4cf5d0fdc4eae0c8cc709b96d9
-  - 42c4a3208b4f82f4fbedaf2940171ec8
-  - fce50cbd7fcb42e479701f2d5eeeab69
-  - 3f528867e04ca954eb0ab5757ce4fc52
+  referencedClips: []
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
