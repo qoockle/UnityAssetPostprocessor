@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 06456afb747a11e47a409da3504d6ae9
+guid: 86467ef38ab5585469bee17aa2b890ac
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable:
@@ -7,26 +7,8 @@ ModelImporter:
       74: 1827226128182048838
     second: Take 001
   - first:
-      74: -6362983349812671562
-    second: New Animation_ 2
-  - first:
-      74: -6362983349812671562
-    second: ' New Animation_ 0'
-  - first:
-      74: 4404253229319081962
-    second: 124125
-  - first:
-      74: 7049287548721168984
-    second: Assets/Import/Esmerelda.fbx
-  - first:
-      74: 4465572614472275999
-    second: Esmerelda
-  - first:
-      74: -7702024936354309602
-    second: Esmerelda 1
-  - first:
-      74: 8510957894960381423
-    second: Esmerelda 1
+      74: 6505164803310628615
+    second: Dont_Esmerelda_pointing
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -56,11 +38,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Esmerelda 1
+      name: Dont_Esmerelda_pointing
       takeName: Take 001
-      internalID: -7702024936354309602
+      internalID: 6505164803310628615
       firstFrame: 0
-      lastFrame: 100
+      lastFrame: 78
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -14,8 +14,8 @@ public class ImportManager : EditorWindow
     bool deleteAfterReimport = false;
     float importScale = 1f;
     float resampleCurveErrors = 0.9f;
-    string loop =  "loop" ;
-
+    string loop =  "loop";
+    
    
 
     private static ImportManager editor;
@@ -26,7 +26,7 @@ public class ImportManager : EditorWindow
     private static List<string> files = new List<string>();
     private GameObject[] selectedGO;
 
-    [MenuItem("Window/FBX Importer/Import Manager")]
+    [MenuItem("Window/Import Managers/FBX Importer")]
     static void ShowEditor()
     {
         editor = EditorWindow.GetWindow<ImportManager>();
@@ -35,18 +35,23 @@ public class ImportManager : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("FBX Import Settings");
+        GUILayout.Label("FBX Importer");
 
         importScale = EditorGUILayout.FloatField("Import Scale", importScale);
         deleteAfterReimport = EditorGUILayout.Toggle("Delete On Import", deleteAfterReimport);
         resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
         loop = EditorGUILayout.TextField("Loop Settings", loop);
 
-
         if (GUILayout.Button("Rename"))
         {
-            selectedGO = Selection.gameObjects;
+            if (files != null)
+            {
+                files.Clear();
+               // Debug.LogWarning("Selected List Cleared");
+            }
+            
             Rename();
+            
             if (deleteAfterReimport)
             {
                 foreach (GameObject gameObject in selectedGO)
@@ -55,6 +60,8 @@ public class ImportManager : EditorWindow
                     AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(gameObject));
                 }
             }
+
+
         }
     }
 
@@ -64,29 +71,33 @@ public class ImportManager : EditorWindow
 
         if (files != null)
         {
-            Debug.Log("Rename ()");
-            for (int i = 0; i < files.Count; i++)
+            Debug.Log("Rename >" + files.Count.ToString() + "< FBX files");
+
+            foreach (string file in files)
             {
-                int idx = files[i].IndexOf("Assets");      
-                string asset = files[i].Substring(idx);
-                AnimationClip orgClip = (AnimationClip)AssetDatabase.LoadAssetAtPath(asset, typeof(AnimationClip));
+                 //Debug.Log(files.Count.ToString());
+                 int idx = file.IndexOf("Assets"); 
+                 //Debug.Log(idx.ToString() + " IDX INDEX");
+                 string asset = file.Substring(idx);
+                 var fileName = Path.GetFileNameWithoutExtension(file);
+                 //Debug.Log("FILENAME ---> (" + fileName.ToString() + ")");
+                 var importer = (ModelImporter)AssetImporter.GetAtPath(asset);
+                 //Debug.Log("IMPORTER ---> (" + importer.ToString() + ")");
+                 RenameAndImport(importer, fileName);
 
-                var fileName = Path.GetFileNameWithoutExtension(files[i]);
-                
-                var importer = (ModelImporter)AssetImporter.GetAtPath(asset);
-
-                RenameAndImport(importer, fileName);
             }
         }
     }
 
     private void RenameAndImport(ModelImporter asset, string name)
     {
-        Debug.Log("Rename And Reimport ()");
+        //Debug.Log("Rename And Reimport ()");
         ModelImporter modelImporter = asset as ModelImporter;
         ModelImporterClipAnimation[] clipAnimations = modelImporter.defaultClipAnimations;
         AssetImporter assetImporter = asset as AssetImporter;
-
+        
+        
+        
         modelImporter.animationCompression = ModelImporterAnimationCompression.Optimal;
         modelImporter.animationPositionError = resampleCurveErrors;
         modelImporter.animationRotationError = resampleCurveErrors;
@@ -95,16 +106,40 @@ public class ImportManager : EditorWindow
 
         for (int i = 0; i < clipAnimations.Length; i++)
         {
+            //Debug.Log("ClipAnimation (" + clipAnimations[i].name + ") RENAMED");
             clipAnimations[i].name = name;
             if (clipAnimations[i].name.Contains(loop))
             {
                 clipAnimations[i].loopTime = true;
             }
+            
+            //ExtrudeAnimationClip(clipAnimations[i]);
         }
 
         modelImporter.clipAnimations = clipAnimations;
 
         modelImporter.SaveAndReimport();
+        
+        Debug.Log("Reimport done");
+    }
+
+    private void ExtrudeAnimationClip(AnimationClip sourceClip)
+    {
+        if (sourceClip != null)
+        {
+            string path = AssetDatabase.GetAssetPath(sourceClip);
+            path = Path.Combine(Path.GetDirectoryName(path), sourceClip.name) + ".anim";
+            string newPath = AssetDatabase.GenerateUniqueAssetPath (path);
+            AnimationClip newClip = new AnimationClip();
+            EditorUtility.CopySerialized(sourceClip, newClip);
+            AssetDatabase.CreateAsset(newClip, newPath);
+        }
+        else
+        {
+            Debug.LogError("No animation clips to extrude");
+        }
+   
+        Debug.Log("Extrude  AnimationClips Done");
     }
 
     private static void CenterWindow()
@@ -123,13 +158,22 @@ public class ImportManager : EditorWindow
         {
             foreach (GameObject go in Selection.gameObjects)
             {
-                if (AssetDatabase.GetAssetPath(go).EndsWith(".fbx"))
+                //Debug.Log("Object (" + go.name + ") SELECTED");
+                if (AssetDatabase.GetAssetPath(go).EndsWith(".FBX") || AssetDatabase.GetAssetPath(go).EndsWith(".fbx"))
                 {
                     files.Add(AssetDatabase.GetAssetPath(go));
+                   // Debug.Log(go.name + " ADDED to array");
                 }
+                else
+                {
+                    Debug.LogError("NO FBX FILES SELECTED");
+                }
+                
             }
         }
-            else
-                Debug.LogError("NO FBX SELECTED");
+        else
+        {
+            Debug.LogError("NO FILES SELECTED");
+        }
     }
 }
