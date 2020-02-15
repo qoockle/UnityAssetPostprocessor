@@ -123,7 +123,7 @@ public class ImportManager : EditorWindow
         Debug.Log("Reimport done");
     }
 
-    private void ExtrudeAnimationClip(AnimationClip sourceClip)
+    private void ExtrudeAnimationClip(AnimationClip sourceClip) //todo duplicate animation clip from fbx file
     {
         if (sourceClip != null)
         {
