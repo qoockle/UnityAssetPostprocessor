@@ -1,18 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-
 
 public class ImportManager : EditorWindow
 {
     // public FBXImportSettings _settings;
 
     bool deleteAfterReimport = false;
-    float importScale = 1f;
+    //float importScale = 1f;
     float resampleCurveErrors = 0.9f;
     string loop =  "loop";
     
@@ -24,7 +20,6 @@ public class ImportManager : EditorWindow
     private static int x = 0;
     private static int y = 0;
     private static List<string> files = new List<string>();
-    private GameObject[] selectedGO;
 
     [MenuItem("Window/Import Managers/FBX Importer")]
     static void ShowEditor()
@@ -37,7 +32,7 @@ public class ImportManager : EditorWindow
     {
         GUILayout.Label("FBX Importer");
 
-        importScale = EditorGUILayout.FloatField("Import Scale", importScale);
+        //importScale = EditorGUILayout.FloatField("Import Scale", importScale);
         deleteAfterReimport = EditorGUILayout.Toggle("Delete On Import", deleteAfterReimport);
         resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
         loop = EditorGUILayout.TextField("Loop Settings", loop);
@@ -54,14 +49,27 @@ public class ImportManager : EditorWindow
             
             if (deleteAfterReimport)
             {
-                foreach (GameObject gameObject in selectedGO)
+                foreach (GameObject gameObject in Selection.gameObjects)
                 {
                     Debug.LogWarning(gameObject + " DELETED");
                     AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(gameObject));
                 }
             }
+        }
 
+        if (GUILayout.Button("EXTRACT"))
+        {
 
+            //var clips = Selection.GetFiltered(typeof(AnimationClip), SelectionMode.Unfiltered);//works only when animationclip selected
+           var clips = Resources.FindObjectsOfTypeAll<AnimationClip>();
+            foreach (AnimationClip clip in clips)
+            {
+                Debug.Log(clip);
+                if (!clip.name.Contains("__preview__"))
+                {
+                    ExtrudeAnimationClip(clip);
+                }
+            }
         }
     }
 
@@ -102,7 +110,7 @@ public class ImportManager : EditorWindow
         modelImporter.animationPositionError = resampleCurveErrors;
         modelImporter.animationRotationError = resampleCurveErrors;
         modelImporter.animationScaleError = resampleCurveErrors;
-        modelImporter.globalScale = importScale;
+       // modelImporter.globalScale = importScale;
 
         for (int i = 0; i < clipAnimations.Length; i++)
         {
@@ -112,8 +120,6 @@ public class ImportManager : EditorWindow
             {
                 clipAnimations[i].loopTime = true;
             }
-            
-            //ExtrudeAnimationClip(clipAnimations[i]);
         }
 
         modelImporter.clipAnimations = clipAnimations;
@@ -123,25 +129,20 @@ public class ImportManager : EditorWindow
         Debug.Log("Reimport done");
     }
 
-    private void ExtrudeAnimationClip(AnimationClip sourceClip) //todo duplicate animation clip from fbx file
+    private void ExtrudeAnimationClip(AnimationClip sourceClip)
     {
-        if (sourceClip != null)
-        {
-            string path = AssetDatabase.GetAssetPath(sourceClip);
-            path = Path.Combine(Path.GetDirectoryName(path), sourceClip.name) + ".anim";
-            string newPath = AssetDatabase.GenerateUniqueAssetPath (path);
-            AnimationClip newClip = new AnimationClip();
-            EditorUtility.CopySerialized(sourceClip, newClip);
-            AssetDatabase.CreateAsset(newClip, newPath);
-        }
-        else
-        {
-            Debug.LogError("No animation clips to extrude");
-        }
-   
-        Debug.Log("Extrude  AnimationClips Done");
-    }
+        
+        //Debug.Log("Source Clip:" + sourceClip);
+        string path = AssetDatabase.GetAssetPath(sourceClip);
+        path = Path.Combine(Path.GetDirectoryName(path), sourceClip.name) + ".anim";
+        string newPath = AssetDatabase.GenerateUniqueAssetPath (path);
+        AnimationClip newClip = new AnimationClip();
+        EditorUtility.CopySerialized(sourceClip, newClip);
+        AssetDatabase.CreateAsset(newClip, newPath);
 
+        Debug.Log("Extrude AnimationClips Done");
+    }
+    
     private static void CenterWindow()
     {
         editor = EditorWindow.GetWindow<ImportManager>();
@@ -168,7 +169,6 @@ public class ImportManager : EditorWindow
                 {
                     Debug.LogError("NO FBX FILES SELECTED");
                 }
-                
             }
         }
         else
