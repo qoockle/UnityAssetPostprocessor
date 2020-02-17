@@ -1,30 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-
 
 public class ImportManager : EditorWindow
 {
     // public FBXImportSettings _settings;
-
-    bool deleteAfterReimport = false;
-    float importScale = 1f;
+    bool deleteFBXAfterExtracting = false;
+    //float importScale = 1f;
     float resampleCurveErrors = 0.9f;
     string loop =  "loop";
     
-   
-
+    private static string _targetExtension = ".asset";
     private static ImportManager editor;
     private static int width = 350;
     private static int height = 300;
     private static int x = 0;
     private static int y = 0;
     private static List<string> files = new List<string>();
-    private GameObject[] selectedGO;
 
     [MenuItem("Window/Import Managers/FBX Importer")]
     static void ShowEditor()
@@ -37,12 +30,12 @@ public class ImportManager : EditorWindow
     {
         GUILayout.Label("FBX Importer");
 
-        importScale = EditorGUILayout.FloatField("Import Scale", importScale);
-        deleteAfterReimport = EditorGUILayout.Toggle("Delete On Import", deleteAfterReimport);
+        //importScale = EditorGUILayout.FloatField("Import Scale", importScale);
+        deleteFBXAfterExtracting = EditorGUILayout.Toggle("Delete FBX after On Import", deleteFBXAfterExtracting);
         resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
         loop = EditorGUILayout.TextField("Loop Settings", loop);
 
-        if (GUILayout.Button("Rename"))
+        if (GUILayout.Button("Rename Animation Clips"))
         {
             if (files != null)
             {
@@ -51,21 +44,21 @@ public class ImportManager : EditorWindow
             }
             
             Rename();
-            
-            if (deleteAfterReimport)
+        }
+
+        if (GUILayout.Button("Extract Animation Clips"))
+        {
+            foreach (Object _object in Selection.objects)
             {
-                foreach (GameObject gameObject in selectedGO)
+                if (AssetDatabase.GetAssetPath(_object).EndsWith(".FBX") || AssetDatabase.GetAssetPath(_object).EndsWith(".fbx"))
                 {
-                    Debug.LogWarning(gameObject + " DELETED");
-                    AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(gameObject));
-                }
+                    ExtractAnimationClips(_object, deleteFBXAfterExtracting);
+                } 
             }
-
-
         }
     }
 
-    public void Rename()
+    private void Rename()
     {
         FileSearch();
 
@@ -84,7 +77,6 @@ public class ImportManager : EditorWindow
                  var importer = (ModelImporter)AssetImporter.GetAtPath(asset);
                  //Debug.Log("IMPORTER ---> (" + importer.ToString() + ")");
                  RenameAndImport(importer, fileName);
-
             }
         }
     }
@@ -96,13 +88,11 @@ public class ImportManager : EditorWindow
         ModelImporterClipAnimation[] clipAnimations = modelImporter.defaultClipAnimations;
         AssetImporter assetImporter = asset as AssetImporter;
         
-        
-        
         modelImporter.animationCompression = ModelImporterAnimationCompression.Optimal;
         modelImporter.animationPositionError = resampleCurveErrors;
         modelImporter.animationRotationError = resampleCurveErrors;
         modelImporter.animationScaleError = resampleCurveErrors;
-        modelImporter.globalScale = importScale;
+       // modelImporter.globalScale = importScale;
 
         for (int i = 0; i < clipAnimations.Length; i++)
         {
@@ -112,34 +102,11 @@ public class ImportManager : EditorWindow
             {
                 clipAnimations[i].loopTime = true;
             }
-            
-            //ExtrudeAnimationClip(clipAnimations[i]);
         }
 
         modelImporter.clipAnimations = clipAnimations;
-
         modelImporter.SaveAndReimport();
-        
         Debug.Log("Reimport done");
-    }
-
-    private void ExtrudeAnimationClip(AnimationClip sourceClip) //todo duplicate animation clip from fbx file
-    {
-        if (sourceClip != null)
-        {
-            string path = AssetDatabase.GetAssetPath(sourceClip);
-            path = Path.Combine(Path.GetDirectoryName(path), sourceClip.name) + ".anim";
-            string newPath = AssetDatabase.GenerateUniqueAssetPath (path);
-            AnimationClip newClip = new AnimationClip();
-            EditorUtility.CopySerialized(sourceClip, newClip);
-            AssetDatabase.CreateAsset(newClip, newPath);
-        }
-        else
-        {
-            Debug.LogError("No animation clips to extrude");
-        }
-   
-        Debug.Log("Extrude  AnimationClips Done");
     }
 
     private static void CenterWindow()
@@ -162,18 +129,46 @@ public class ImportManager : EditorWindow
                 if (AssetDatabase.GetAssetPath(go).EndsWith(".FBX") || AssetDatabase.GetAssetPath(go).EndsWith(".fbx"))
                 {
                     files.Add(AssetDatabase.GetAssetPath(go));
-                   // Debug.Log(go.name + " ADDED to array");
+                   //Debug.Log(go.name + " ADDED to array");
                 }
                 else
                 {
                     Debug.LogError("NO FBX FILES SELECTED");
                 }
-                
             }
         }
         else
         {
             Debug.LogError("NO FILES SELECTED");
+        }
+    }
+    private void ExtractAnimationClips(Object selectedObject, bool delete)
+    {
+        string selectedObjectPath = AssetDatabase.GetAssetPath(selectedObject);
+        string parentfolderPath = selectedObjectPath.Substring(0, selectedObjectPath.Length - (selectedObject.name.Length + 5));
+        
+        //Create AnimationClips
+        Object[] objects = AssetDatabase.LoadAllAssetsAtPath(selectedObjectPath);
+        foreach (Object _object in objects)
+        {
+            if (_object is AnimationClip && !_object.name.Contains("__preview__"))
+            {
+                AnimationClip clip = Object.Instantiate(_object) as AnimationClip;
+                AssetDatabase.CreateAsset(clip, parentfolderPath + "/"  + _object.name + _targetExtension);
+            }
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        DeleteSelectedAsset(selectedObject, delete);
+    }
+
+    private void DeleteSelectedAsset(Object selectedObject, bool delete)
+    {
+        if (delete)
+        {
+            Debug.LogWarning(selectedObject + " DELETED");
+            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(selectedObject));
         }
     }
 }
