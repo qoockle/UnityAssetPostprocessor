@@ -11,7 +11,7 @@ namespace ImporterManager
         public static float resampleCurveErrors = 0.9f;
         public static string loop =  "loop";
         
-        public static string _targetExtension = ".asset";
+        public static string _targetExtension = ".anim";
         private static List<string> files = new List<string>();
         
         public static void Rename()
