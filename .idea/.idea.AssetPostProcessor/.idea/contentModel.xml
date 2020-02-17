@@ -6,11 +6,10 @@
       <e p="AssetPostProcessor.sln" t="IncludeFlat" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
-          <e p="FBXAttributesGUI.cs" t="Include" />
           <e p="FBXImporter" t="Include">
             <e p="FBXImporterEditorWindow.cs" t="Include" />
-            <e p="FBXImportSettings.cs" t="Include" />
-            <e p="ImportManager.cs" t="Include" />
+            <e p="FBXImporterManager.cs" t="Include" />
+            <e p="FBXImporterSettings.cs" t="Include" />
           </e>
         </e>
       </e>
