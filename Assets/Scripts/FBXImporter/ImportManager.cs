@@ -6,14 +6,12 @@ using UnityEngine;
 public class ImportManager : EditorWindow
 {
     // public FBXImportSettings _settings;
-
-    bool deleteAfterReimport = false;
+    bool deleteFBXAfterExtracting = false;
     //float importScale = 1f;
     float resampleCurveErrors = 0.9f;
     string loop =  "loop";
     
-   
-
+    private static string _targetExtension = ".asset";
     private static ImportManager editor;
     private static int width = 350;
     private static int height = 300;
@@ -33,11 +31,11 @@ public class ImportManager : EditorWindow
         GUILayout.Label("FBX Importer");
 
         //importScale = EditorGUILayout.FloatField("Import Scale", importScale);
-        deleteAfterReimport = EditorGUILayout.Toggle("Delete On Import", deleteAfterReimport);
+        deleteFBXAfterExtracting = EditorGUILayout.Toggle("Delete FBX after On Import", deleteFBXAfterExtracting);
         resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
         loop = EditorGUILayout.TextField("Loop Settings", loop);
 
-        if (GUILayout.Button("Rename"))
+        if (GUILayout.Button("Rename Animation Clips"))
         {
             if (files != null)
             {
@@ -46,34 +44,21 @@ public class ImportManager : EditorWindow
             }
             
             Rename();
-            
-            if (deleteAfterReimport)
-            {
-                foreach (GameObject gameObject in Selection.gameObjects)
-                {
-                    Debug.LogWarning(gameObject + " DELETED");
-                    AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(gameObject));
-                }
-            }
         }
 
-        if (GUILayout.Button("EXTRACT"))
+        if (GUILayout.Button("Extract Animation Clips"))
         {
-
-            //var clips = Selection.GetFiltered(typeof(AnimationClip), SelectionMode.Unfiltered);//works only when animationclip selected
-           var clips = Resources.FindObjectsOfTypeAll<AnimationClip>();
-            foreach (AnimationClip clip in clips)
+            foreach (Object _object in Selection.objects)
             {
-                Debug.Log(clip);
-                if (!clip.name.Contains("__preview__"))
+                if (AssetDatabase.GetAssetPath(_object).EndsWith(".FBX") || AssetDatabase.GetAssetPath(_object).EndsWith(".fbx"))
                 {
-                    ExtrudeAnimationClip(clip);
-                }
+                    ExtractAnimationClips(_object, deleteFBXAfterExtracting);
+                } 
             }
         }
     }
 
-    public void Rename()
+    private void Rename()
     {
         FileSearch();
 
@@ -92,7 +77,6 @@ public class ImportManager : EditorWindow
                  var importer = (ModelImporter)AssetImporter.GetAtPath(asset);
                  //Debug.Log("IMPORTER ---> (" + importer.ToString() + ")");
                  RenameAndImport(importer, fileName);
-
             }
         }
     }
@@ -103,8 +87,6 @@ public class ImportManager : EditorWindow
         ModelImporter modelImporter = asset as ModelImporter;
         ModelImporterClipAnimation[] clipAnimations = modelImporter.defaultClipAnimations;
         AssetImporter assetImporter = asset as AssetImporter;
-        
-        
         
         modelImporter.animationCompression = ModelImporterAnimationCompression.Optimal;
         modelImporter.animationPositionError = resampleCurveErrors;
@@ -123,26 +105,10 @@ public class ImportManager : EditorWindow
         }
 
         modelImporter.clipAnimations = clipAnimations;
-
         modelImporter.SaveAndReimport();
-        
         Debug.Log("Reimport done");
     }
 
-    private void ExtrudeAnimationClip(AnimationClip sourceClip)
-    {
-        
-        //Debug.Log("Source Clip:" + sourceClip);
-        string path = AssetDatabase.GetAssetPath(sourceClip);
-        path = Path.Combine(Path.GetDirectoryName(path), sourceClip.name) + ".anim";
-        string newPath = AssetDatabase.GenerateUniqueAssetPath (path);
-        AnimationClip newClip = new AnimationClip();
-        EditorUtility.CopySerialized(sourceClip, newClip);
-        AssetDatabase.CreateAsset(newClip, newPath);
-
-        Debug.Log("Extrude AnimationClips Done");
-    }
-    
     private static void CenterWindow()
     {
         editor = EditorWindow.GetWindow<ImportManager>();
@@ -163,7 +129,7 @@ public class ImportManager : EditorWindow
                 if (AssetDatabase.GetAssetPath(go).EndsWith(".FBX") || AssetDatabase.GetAssetPath(go).EndsWith(".fbx"))
                 {
                     files.Add(AssetDatabase.GetAssetPath(go));
-                   // Debug.Log(go.name + " ADDED to array");
+                   //Debug.Log(go.name + " ADDED to array");
                 }
                 else
                 {
@@ -174,6 +140,35 @@ public class ImportManager : EditorWindow
         else
         {
             Debug.LogError("NO FILES SELECTED");
+        }
+    }
+    private void ExtractAnimationClips(Object selectedObject, bool delete)
+    {
+        string selectedObjectPath = AssetDatabase.GetAssetPath(selectedObject);
+        string parentfolderPath = selectedObjectPath.Substring(0, selectedObjectPath.Length - (selectedObject.name.Length + 5));
+        
+        //Create AnimationClips
+        Object[] objects = AssetDatabase.LoadAllAssetsAtPath(selectedObjectPath);
+        foreach (Object _object in objects)
+        {
+            if (_object is AnimationClip && !_object.name.Contains("__preview__"))
+            {
+                AnimationClip clip = Object.Instantiate(_object) as AnimationClip;
+                AssetDatabase.CreateAsset(clip, parentfolderPath + "/"  + _object.name + _targetExtension);
+            }
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        DeleteSelectedAsset(selectedObject, delete);
+    }
+
+    private void DeleteSelectedAsset(Object selectedObject, bool delete)
+    {
+        if (delete)
+        {
+            Debug.LogWarning(selectedObject + " DELETED");
+            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(selectedObject));
         }
     }
 }
