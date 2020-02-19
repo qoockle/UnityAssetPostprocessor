@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using ImporterManager;
 
@@ -14,7 +13,6 @@ public class FBXImporterEditorWindow : EditorWindow
     private static int height = 300;
     private static int x = 0;
     private static int y = 0;
-    private static List<string> files = new List<string>();
 
     [MenuItem("Window/Import Managers/FBX Importer")]
     private static void ShowEditor()
@@ -32,13 +30,22 @@ public class FBXImporterEditorWindow : EditorWindow
         resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
         loop = EditorGUILayout.TextField("Loop Settings", loop);
 
+        if (GUILayout.Button("Apply model import settings"))
+        {
+            if (FBXImporterManager.files != null)
+            {
+                FBXImporterManager.files.Clear();
+            }
+            //FBXImporterManager.ModelImportSettings();
+            Debug.Log("Not yet implemented");
+        }
         if (GUILayout.Button("Rename Animation Clips"))
         {
-            if (files != null)
+            if (FBXImporterManager.files != null)
             {
-                files.Clear();
+                FBXImporterManager.files.Clear();
             }
-            FBXImporterManager.Rename();
+            FBXImporterManager.RenameAnimationClip();
         }
 
         if (GUILayout.Button("Extract Animation Clips"))
@@ -47,7 +54,7 @@ public class FBXImporterEditorWindow : EditorWindow
             {
                 if (AssetDatabase.GetAssetPath(_object).EndsWith(".FBX") || AssetDatabase.GetAssetPath(_object).EndsWith(".fbx"))
                 {
-                    FBXImporterManager.ExtractAnimationClips(_object, deleteFBXAfterExtracting);
+                    FBXImporterManager.ExtractAnimationClip(_object, deleteFBXAfterExtracting);
                 } 
             }
         }

@@ -10,11 +10,30 @@ namespace ImporterManager
         public static bool deleteFBXAfterExtracting = true;
         public static float resampleCurveErrors = 0.9f;
         public static string loop =  "loop";
+
+        private static float fileScale = 1f;
+        private static bool importBlendShapes = false;
+        private static bool importVisibility = false;
+        private static bool importCameras = false;
+        private static bool importLights = false;
+        private static bool preserveHierarchy = false;
+        private static ModelImporterMeshCompression meshCompression = ModelImporterMeshCompression.High;
+        private static bool readWriteEnabled = false;
+        private static bool optimizeMesh = false;
+        private static bool generateColliders = false;
+        private static bool keepQuads = false;
+        private static bool weldVertices = true;
+        private static ModelImporterIndexFormat indexFormat = ModelImporterIndexFormat.UInt16;
+        //private static bool legacyBlendShapeNormals = false;
+        private static ModelImporterNormals normals = ModelImporterNormals.None;
+        private static bool swapUvs = false;
+        private static bool generateLightmapUvs = false;
+
+        private static string _targetExtension = ".anim";
         
-        public static string _targetExtension = ".anim";
-        private static List<string> files = new List<string>();
+        public static List<string> files = new List<string>();
         
-        public static void Rename()
+        public static void RenameAnimationClip()
         {
             FileSearch(); //validate files
             if (files != null)
@@ -24,19 +43,19 @@ namespace ImporterManager
                 {
                      int idx = file.IndexOf("Assets"); 
                      string asset = file.Substring(idx);
-                     var fileName = Path.GetFileNameWithoutExtension(file);
-                     var importer = (ModelImporter)AssetImporter.GetAtPath(asset);
+                     string fileName = Path.GetFileNameWithoutExtension(file);
+                     ModelImporter importer = (ModelImporter)AssetImporter.GetAtPath(asset);
                      
-                     RenameAndImport(importer, fileName);
+                     RenameAndImportAnimationClip(importer, fileName);
                 }
             }
         }
 
-        public static void RenameAndImport(ModelImporter asset, string name)
+        private static void RenameAndImportAnimationClip(ModelImporter asset, string name)
         {
             ModelImporter modelImporter = asset as ModelImporter;
             ModelImporterClipAnimation[] clipAnimations = modelImporter.defaultClipAnimations;
-            AssetImporter assetImporter = asset as AssetImporter;
+           // AssetImporter assetImporter = asset as AssetImporter;
             
             modelImporter.animationCompression = ModelImporterAnimationCompression.Optimal;
             modelImporter.animationPositionError = resampleCurveErrors;
@@ -58,7 +77,7 @@ namespace ImporterManager
             //Debug.Log("Rename done");
         }
 
-        static void FileSearch()
+        private static void FileSearch()
         {
             if (Selection.gameObjects != null)
             {
@@ -79,7 +98,7 @@ namespace ImporterManager
                 Debug.LogError("NO FILES SELECTED");
             }
         }
-        public static void ExtractAnimationClips(Object selectedObject, bool delete)
+        public static void ExtractAnimationClip(Object selectedObject, bool delete)
         {
             string selectedObjectPath = AssetDatabase.GetAssetPath(selectedObject);
             string parentfolderPath = selectedObjectPath.Substring(0, selectedObjectPath.Length - (selectedObject.name.Length + 5));
@@ -100,7 +119,7 @@ namespace ImporterManager
             DeleteSelectedAsset(selectedObject, delete);
         }
 
-        public static void DeleteSelectedAsset(Object selectedObject, bool delete)
+        private static void DeleteSelectedAsset(Object selectedObject, bool delete)
         {
             if (delete)
             {
@@ -108,5 +127,33 @@ namespace ImporterManager
                 AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(selectedObject));
             }
         }
+
+        public static void ModelImportSettings(ModelImporter asset)
+        {
+            ModelImporter modelImporter = asset as ModelImporter;
+            modelImporter.globalScale = fileScale;
+            modelImporter.importBlendShapes = importBlendShapes;
+            modelImporter.importVisibility = importVisibility;
+            modelImporter.importCameras = importCameras;
+            modelImporter.importLights = importLights;
+            modelImporter.preserveHierarchy = preserveHierarchy;
+            modelImporter.meshCompression = meshCompression;
+            modelImporter.isReadable = readWriteEnabled;
+            modelImporter.optimizeMesh = optimizeMesh; //todo refactor
+            modelImporter.addCollider = generateColliders;
+            modelImporter.keepQuads = keepQuads;
+            modelImporter.weldVertices = weldVertices;
+            modelImporter.meshCompression = meshCompression;
+            modelImporter.indexFormat = indexFormat;
+            modelImporter.importNormals = normals;
+            modelImporter.swapUVChannels = swapUvs;
+            modelImporter.generateSecondaryUV = generateLightmapUvs;
+        }
+
+        public static void RigImportSettings(ModelImporter asset)
+        {
+            //todo add rig import settings
+        }
+
     }
 }
