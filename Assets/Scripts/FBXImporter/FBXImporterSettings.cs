@@ -14,5 +14,4 @@ public class FBXImporterSettings : ScriptableObject
 
     [Tooltip("Prefixes will be ignored by importing")]
     public static string[] IgnorePrefix = new string[] { "dont_"};
-
 }
