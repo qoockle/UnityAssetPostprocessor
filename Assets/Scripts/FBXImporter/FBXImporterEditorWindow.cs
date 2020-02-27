@@ -20,6 +20,7 @@ public class FBXImporterEditorWindow : EditorWindow
         LoadAttributes();
         editor = EditorWindow.GetWindow<FBXImporterEditorWindow>();
         CenterWindow();
+        //settings = GameObject.Find("FBXImportSettingsAsset");
     }
 
     private void OnGUI()
@@ -30,6 +31,7 @@ public class FBXImporterEditorWindow : EditorWindow
         resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
         loop = EditorGUILayout.TextField("Loop Settings", loop);
 
+        /*
         if (GUILayout.Button("Apply model import settings"))
         {
             if (FBXImporterManager.files != null)
@@ -39,6 +41,7 @@ public class FBXImporterEditorWindow : EditorWindow
             //FBXImporterManager.ModelImportSettings();
             Debug.Log("Not yet implemented");
         }
+        */
         if (GUILayout.Button("Rename Animation Clips"))
         {
             if (FBXImporterManager.files != null)
@@ -58,11 +61,12 @@ public class FBXImporterEditorWindow : EditorWindow
                 } 
             }
         }
-        
+        /*
         if (GUILayout.Button("Save config"))
         {
-            SaveAttributes();//todo add save config
+             SaveAttributes();//todo add save config
         }
+        */
     }
 
     private static void CenterWindow()
