@@ -1,36 +1,42 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using ImporterManager;
+using Object = UnityEngine.Object;
 
 public class FBXImporterEditorWindow : EditorWindow
 {
     private static bool deleteFBXAfterExtracting;
     private static float resampleCurveErrors;
+    private float scaleFbx;
     private static string loop;
-
+    public ImporterSettings settings;
     private static FBXImporterEditorWindow editor;
     private static int width = 350;
     private static int height = 300;
     private static int x = 0;
     private static int y = 0;
 
-    [MenuItem("Window/Import Managers/FBX Importer")]
+    [MenuItem("Tools/Import Managers/FBX Importer")]
     private static void ShowEditor()
     {
-        LoadAttributes();
+        
         editor = EditorWindow.GetWindow<FBXImporterEditorWindow>();
         CenterWindow();
-        //settings = GameObject.Find("FBXImportSettingsAsset");
     }
 
+    private void OnEnable()
+    {
+        LoadSettings();
+    }
+    
     private void OnGUI()
     {
         GUILayout.Label("FBX Importer");
-        
         EditorGUILayout.Toggle("Delete FBX after Extracting", deleteFBXAfterExtracting);
         resampleCurveErrors = EditorGUILayout.FloatField("Rules for resample curves", resampleCurveErrors);
         loop = EditorGUILayout.TextField("Loop Settings", loop);
-
+        scaleFbx = EditorGUILayout.FloatField("ScaleFBX", scaleFbx);
         /*
         if (GUILayout.Button("Apply model import settings"))
         {
@@ -61,14 +67,17 @@ public class FBXImporterEditorWindow : EditorWindow
                 } 
             }
         }
-        /*
+        
         if (GUILayout.Button("Save config"))
         {
-             SaveAttributes();//todo add save config
+             SaveSettings();//todo add save config
         }
-        */
+        
+        if (GUILayout.Button("Load config"))
+        {
+            LoadSettings();
+        }
     }
-
     private static void CenterWindow()
     {
         editor = EditorWindow.GetWindow<FBXImporterEditorWindow>();
@@ -78,7 +87,7 @@ public class FBXImporterEditorWindow : EditorWindow
         editor.maxSize = new Vector2(width, height);
         editor.minSize = editor.maxSize;
     }
-    private static void LoadAttributes()
+    private void LoadAttributes(ImporterSettings settings)
     {  
         //FBXImportSettings _settings = ScriptableObject.CreateInstance<FBXImportSettings>();
         //_settings = FindObjectOfType <FBXImportSettings>();
@@ -86,9 +95,24 @@ public class FBXImporterEditorWindow : EditorWindow
         resampleCurveErrors = FBXImporterManager.resampleCurveErrors;
         loop = FBXImporterManager.loop;
         deleteFBXAfterExtracting = FBXImporterManager.deleteFBXAfterExtracting;
+        scaleFbx = settings.someVar;
+        
+        Debug.Log("LoadAttributes()");
     }
-    private static void SaveAttributes()
+
+    private void LoadSettings()
     {
-        Debug.Log("Note yet implemented");
+        Debug.Log("LoadSettings()");
+        settings = (ImporterSettings)AssetDatabase.LoadAssetAtPath("Assets/Scripts/FBXImporter/Editor/SettingsAsset.asset", typeof(ImporterSettings));
+        if (settings != null)
+            LoadAttributes(settings);
+        else
+            Debug.LogError("settings == null");
+    }
+
+    private void SaveSettings()
+    {
+        settings.someVar = scaleFbx;
+        // Debug.Log("Note yet implemented");
     }
 }
