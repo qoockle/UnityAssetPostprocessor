@@ -13,7 +13,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/FBXImporter/Editor/FBXImporterEditorWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/FBXImporter/Editor/FBXImporterManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/FBXImporter/Editor/FBXImporterSettings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/119DEDB1-AE4D-4D7F-87BB-68CFAF186648/ed/55901d39/EditorGUILayout.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/FBXImporter/Editor/ImporterSettings.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -25,6 +25,7 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/FBXImporter/ImporterSettings.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/FBXImporter/FBXImporterEditorWindow.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/FBXImporter/Editor/ImporterSettings.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/FBXImporter/Editor/FBXImporterManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/FBXImporter/Editor/FBXImporterEditorWindow.cs" />
       </list>
     </option>
@@ -79,6 +80,7 @@
       <option name="presentableId" value="Default" />
       <updated>1582830451783</updated>
       <workItem from="1582830463659" duration="6051000" />
+      <workItem from="1582971732638" duration="11647000" />
     </task>
     <servers />
   </component>
@@ -92,7 +94,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -107,5 +111,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="497" y="234" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582834453211" />
+    <state x="2536" y="240" key="run.anything.popup" timestamp="1582974333598">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2536" y="240" key="run.anything.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1582974333598" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1582980738881">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582980738881" />
   </component>
 </project>

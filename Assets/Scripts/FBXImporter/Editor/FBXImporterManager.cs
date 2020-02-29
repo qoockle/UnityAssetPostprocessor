@@ -7,10 +7,10 @@ namespace ImporterManager
 {
     public class FBXImporterManager
     {
-        public static bool deleteFBXAfterExtracting = true;
-        public static float resampleCurveErrors = 0.9f;
-        public static string loop =  "loop";
-
+        public static float resampleCurveErrors;
+        public static string loop;
+        public static ModelImporterAnimationCompression animationCompression;
+        /*
         private static float fileScale = 1f;
         private static bool importBlendShapes = false;
         private static bool importVisibility = false;
@@ -24,15 +24,14 @@ namespace ImporterManager
         private static bool keepQuads = false;
         private static bool weldVertices = true;
         private static ModelImporterIndexFormat indexFormat = ModelImporterIndexFormat.UInt16;
-        //private static bool legacyBlendShapeNormals = false;
         private static ModelImporterNormals normals = ModelImporterNormals.None;
         private static bool swapUvs = false;
         private static bool generateLightmapUvs = false;
-
+        */
         private static string _targetExtension = ".anim";
         
         public static List<string> files = new List<string>();
-        
+
         public static void RenameAnimationClip()
         {
             FileSearch(); //validate files
@@ -55,9 +54,8 @@ namespace ImporterManager
         {
             ModelImporter modelImporter = asset as ModelImporter;
             ModelImporterClipAnimation[] clipAnimations = modelImporter.defaultClipAnimations;
-           // AssetImporter assetImporter = asset as AssetImporter;
-            
-            modelImporter.animationCompression = ModelImporterAnimationCompression.Optimal;
+
+            modelImporter.animationCompression = animationCompression;
             modelImporter.animationPositionError = resampleCurveErrors;
             modelImporter.animationRotationError = resampleCurveErrors;
             modelImporter.animationScaleError = resampleCurveErrors;
@@ -127,8 +125,8 @@ namespace ImporterManager
                 AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(selectedObject));
             }
         }
-
-        public static void ModelImportSettings(ModelImporter asset)
+        /*
+        private static void ModelImportSettings(ModelImporter asset)
         {
             ModelImporter modelImporter = asset as ModelImporter;
             modelImporter.globalScale = fileScale;
@@ -148,12 +146,15 @@ namespace ImporterManager
             modelImporter.importNormals = normals;
             modelImporter.swapUVChannels = swapUvs;
             modelImporter.generateSecondaryUV = generateLightmapUvs;
+            
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
-
+        
         public static void RigImportSettings(ModelImporter asset)
         {
             //todo add rig import settings
         }
-
+        */
     }
 }

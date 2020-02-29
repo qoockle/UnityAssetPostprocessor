@@ -10,6 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 721531d1af3a13d48aa9a104881162d9, type: 3}
-  m_Name: SettingsAsset
+  m_Name: FBXImporterSettingsAsset
   m_EditorClassIdentifier: 
-  someVar: 3.16
+  deleteFBXAfterExtracting: 1
+  resampleCurveErrors: 0.9
+  stringLoopSufix: loop
+  animationCompression: 3
